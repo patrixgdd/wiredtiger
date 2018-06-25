@@ -164,7 +164,7 @@ wts_salvage(void)
 	wts_verify("post-salvage verify");
 	wts_close();
 
-	wts_dump("salvage", SINGLETHREADED);
+	wts_dump("salvage", USE_BERKELEY_DB);
 
 	/* Corrupt the file randomly, salvage, then verify. */
 	if (corrupt()) {

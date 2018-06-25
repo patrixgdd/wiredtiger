@@ -185,7 +185,7 @@ main(int argc, char *argv[])
 		track("starting up", 0ULL, NULL);
 
 #ifdef HAVE_BERKELEY_DB
-		if (SINGLETHREADED)
+		if (USE_BERKELEY_DB)
 			bdb_open();		/* Initial file config */
 #endif
 		wts_open(g.home, true, &g.wts_conn);
@@ -226,7 +226,7 @@ main(int argc, char *argv[])
 
 		track("shutting down", 0ULL, NULL);
 #ifdef HAVE_BERKELEY_DB
-		if (SINGLETHREADED)
+		if (USE_BERKELEY_DB)
 			bdb_close();
 #endif
 		wts_close();
@@ -240,7 +240,7 @@ main(int argc, char *argv[])
 		 * If single-threaded, we can dump and compare the WiredTiger
 		 * and Berkeley DB data sets.
 		 */
-		if (SINGLETHREADED)
+		if (USE_BERKELEY_DB)
 			wts_dump("standard", 1);
 
 		/*

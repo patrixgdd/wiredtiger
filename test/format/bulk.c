@@ -145,7 +145,7 @@ wts_load(void)
 		}
 
 #ifdef HAVE_BERKELEY_DB
-		if (SINGLETHREADED)
+		if (USE_BERKELEY_DB)
 			bdb_insert(key.data, key.size, value.data, value.size);
 #endif
 	}

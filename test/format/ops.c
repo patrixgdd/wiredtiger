@@ -767,7 +767,7 @@ ops(void *arg)
 			 * Skip if we are using data-sources or LSM, they don't
 			 * support reading from checkpoints.
 			 */
-			if (!SINGLETHREADED && !DATASOURCE("helium") &&
+			if (!USE_BERKELEY_DB && !DATASOURCE("helium") &&
 			    !DATASOURCE("kvsbdb") && !DATASOURCE("lsm") &&
 			    mmrand(&tinfo->rnd, 1, 10) == 1) {
 				/*
@@ -1273,7 +1273,7 @@ read_row_worker(
 		    session, "%-10s%" PRIu64, "read", keyno);
 
 #ifdef HAVE_BERKELEY_DB
-	if (!SINGLETHREADED)
+	if (!USE_BERKELEY_DB)
 		return (ret);
 
 	/* Retrieve the BDB value. */
@@ -1475,7 +1475,7 @@ order_error_row:
 		}
 
 #ifdef HAVE_BERKELEY_DB
-	if (!SINGLETHREADED)
+	if (!USE_BERKELEY_DB)
 		return (ret);
 
 	{
@@ -1623,7 +1623,7 @@ row_modify(TINFO *tinfo, WT_CURSOR *cursor, bool positioned)
 		    (int)tinfo->value->size, tinfo->value->data);
 
 #ifdef HAVE_BERKELEY_DB
-	if (!SINGLETHREADED)
+	if (!USE_BERKELEY_DB)
 		return (0);
 
 	bdb_update(
@@ -1661,7 +1661,7 @@ col_modify(TINFO *tinfo, WT_CURSOR *cursor, bool positioned)
 		    (int)tinfo->value->size, tinfo->value->data);
 
 #ifdef HAVE_BERKELEY_DB
-	if (!SINGLETHREADED)
+	if (!USE_BERKELEY_DB)
 		return (0);
 
 	key_gen(tinfo->key, tinfo->keyno);
@@ -1723,7 +1723,7 @@ row_truncate(TINFO *tinfo, WT_CURSOR *cursor)
 		    tinfo->keyno, tinfo->last);
 
 #ifdef HAVE_BERKELEY_DB
-	if (SINGLETHREADED)
+	if (USE_BERKELEY_DB)
 		bdb_truncate(tinfo->keyno, tinfo->last);
 #endif
 	return (0);
@@ -1775,7 +1775,7 @@ col_truncate(TINFO *tinfo, WT_CURSOR *cursor)
 		    tinfo->keyno, tinfo->last);
 
 #ifdef HAVE_BERKELEY_DB
-	if (SINGLETHREADED)
+	if (USE_BERKELEY_DB)
 		bdb_truncate(tinfo->keyno, tinfo->last);
 #endif
 	return (0);
@@ -1808,7 +1808,7 @@ row_update(TINFO *tinfo, WT_CURSOR *cursor, bool positioned)
 		    (int)tinfo->value->size, tinfo->value->data);
 
 #ifdef HAVE_BERKELEY_DB
-	if (SINGLETHREADED)
+	if (USE_BERKELEY_DB)
 		bdb_update(
 		    tinfo->key->data, tinfo->key->size,
 		    tinfo->value->data, tinfo->value->size);
@@ -1851,7 +1851,7 @@ col_update(TINFO *tinfo, WT_CURSOR *cursor, bool positioned)
 	}
 
 #ifdef HAVE_BERKELEY_DB
-	if (SINGLETHREADED) {
+	if (USE_BERKELEY_DB) {
 		key_gen(tinfo->key, tinfo->keyno);
 		bdb_update(
 		    tinfo->key->data, tinfo->key->size,
@@ -1992,7 +1992,7 @@ row_insert(TINFO *tinfo, WT_CURSOR *cursor, bool positioned)
 		    (int)tinfo->value->size, tinfo->value->data);
 
 #ifdef HAVE_BERKELEY_DB
-	if (SINGLETHREADED)
+	if (USE_BERKELEY_DB)
 		bdb_update(
 		    tinfo->key->data, tinfo->key->size,
 		    tinfo->value->data, tinfo->value->size);
@@ -2037,7 +2037,7 @@ col_insert(TINFO *tinfo, WT_CURSOR *cursor)
 	}
 
 #ifdef HAVE_BERKELEY_DB
-	if (SINGLETHREADED) {
+	if (USE_BERKELEY_DB) {
 		key_gen(tinfo->key, tinfo->keyno);
 		bdb_update(
 		    tinfo->key->data, tinfo->key->size,
@@ -2073,7 +2073,7 @@ row_remove(TINFO *tinfo, WT_CURSOR *cursor, bool positioned)
 		    cursor->session, "%-10s%" PRIu64, "remove", tinfo->keyno);
 
 #ifdef HAVE_BERKELEY_DB
-	if (SINGLETHREADED) {
+	if (USE_BERKELEY_DB) {
 		int notfound;
 
 		bdb_remove(tinfo->keyno, &notfound);
@@ -2107,7 +2107,7 @@ col_remove(TINFO *tinfo, WT_CURSOR *cursor, bool positioned)
 		    cursor->session, "%-10s%" PRIu64, "remove", tinfo->keyno);
 
 #ifdef HAVE_BERKELEY_DB
-	if (SINGLETHREADED) {
+	if (USE_BERKELEY_DB) {
 		int notfound;
 
 		bdb_remove(tinfo->keyno, &notfound);

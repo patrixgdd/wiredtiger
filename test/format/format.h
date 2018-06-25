@@ -76,6 +76,20 @@
 #define	DATASOURCE(v)	(strcmp(v, g.c_data_source) == 0 ? 1 : 0)
 #define	SINGLETHREADED	(g.c_threads == 1)
 
+/*
+ * Berkeley DB can be used for verification only when running in
+ * 	- single threaded mode
+ * 	- and either
+ * 		- with out salvage
+ * 		- with salvage but without delete or truncate operations.
+ * The problem with deleting records is salvage restores deleted records if a
+ * page splits leaving a deleted record on one side of the split, so we cannot
+ * depend on correctness in that case.
+ */
+#define	USE_BERKELEY_DB							\
+	((g.c_threads == 1) &&						\
+	    (!g.c_salvage || (g.c_delete_pct == 0 && g.c_truncate == 0)))
+
 #define	FORMAT_OPERATION_REPS	3		/* 3 thread operations sets */
 
 #define	MAX_MODIFY_ENTRIES	5		/* maximum change vectors */
