@@ -510,6 +510,15 @@ wts_dump(const char *tag, int dump_bdb)
 	 */
 	if (g.c_in_memory != 0)
 		return;
+	/*
+	 * If no records were deleted/truncated, dump and compare against
+	 * Berkeley DB. (The problem with deleting records, is salvage restores
+	 * deleted records if a page splits leaving a deleted record on one
+	 * side of the split, so we cannot depend on correctness in that case.)
+	 */
+	if (!strcmp("salvage", tag) &&
+	    (g.c_delete_pct != 0 || g.c_truncate != 0))
+		return;
 	if (DATASOURCE("helium") || DATASOURCE("kvsbdb"))
 		return;
 
