@@ -531,7 +531,6 @@ wts_dump_bdb_compare(const char *tag)
 	free(cmd);
 #else
 	(void)tag;				/* [-Wunused-variable] */
-	(void)dump_bdb;				/* [-Wunused-variable] */
 #endif
 }
 
