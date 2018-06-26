@@ -366,7 +366,7 @@ void	 val_gen_teardown(WT_ITEM *);
 void	 val_init(void);
 void	 val_teardown(void);
 void	 wts_close(void);
-void	 wts_dump(const char *, int);
+void	 wts_dump_bdb_compare(const char *);
 void	 wts_init(void);
 void	 wts_load(void);
 void	 wts_open(const char *, bool, WT_CONNECTION **);

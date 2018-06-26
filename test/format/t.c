@@ -236,12 +236,8 @@ main(int argc, char *argv[])
 		 */
 		wts_rebalance();
 
-		/*
-		 * If single-threaded, we can dump and compare the WiredTiger
-		 * and Berkeley DB data sets.
-		 */
-		if (USE_BERKELEY_DB)
-			wts_dump("standard", 1);
+		/* Compare the WiredTiger and Berkeley DB data sets. */
+		wts_dump_bdb_compare("standard");
 
 		/*
 		 * Salvage testing.

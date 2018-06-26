@@ -498,7 +498,7 @@ wts_close(void)
 }
 
 void
-wts_dump(const char *tag, int dump_bdb)
+wts_dump_bdb_compare(const char *tag)
 {
 #ifdef HAVE_BERKELEY_DB
 	size_t len;
@@ -510,6 +510,9 @@ wts_dump(const char *tag, int dump_bdb)
 	 */
 	if (g.c_in_memory != 0)
 		return;
+	/* Check whether data content can be compared with Berkeley DB. */
+	if (!USE_BERKELEY_DB)
+		return;
 	if (DATASOURCE("helium") || DATASOURCE("kvsbdb"))
 		return;
 
@@ -519,9 +522,7 @@ wts_dump(const char *tag, int dump_bdb)
 	cmd = dmalloc(len);
 	testutil_check(__wt_snprintf(cmd, len,
 	    "sh s_dumpcmp -h %s %s %s %s %s %s",
-	    g.home,
-	    dump_bdb ? "-b " : "",
-	    dump_bdb ? BERKELEY_DB_PATH : "",
+	    g.home, "-b ", BERKELEY_DB_PATH,
 	    g.type == FIX || g.type == VAR ? "-c" : "",
 	    g.uri == NULL ? "" : "-n",
 	    g.uri == NULL ? "" : g.uri));
